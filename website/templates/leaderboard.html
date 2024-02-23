@@ -15,7 +15,7 @@
                 User Not Found
             {% endif %}
         </p>
-        <p>Win/Loss Ratio: {{ '%0.2f'|format(top_user.win_loss_ratio) }}</p>
+        <p>Win Percentage: {{ '%0.2f'|format(top_user.percentage) }}</p>
     </div>
     {% else %}
     <p class="mt-4">No users found.</p>
@@ -28,19 +28,31 @@
                 <tr>
                     <th>Rank</th>
                     <th>User Name</th>
-                    <th>Win/Loss Ratio</th>
+                    <th>Win Percentage</th>
+                    <th>Win/ Loss Ratio</th>
                 </tr>
             </thead>
             <tbody>
-                {% for iuser in sorted_users %}
+                {% for ii, iuser in sorted_users %}
                     {% set user_obj = user.query.get(iuser.user_id) %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <td>{{ ii + 1 }}</td>
                         <td>{{ user_obj.first_name if user_obj else 'User Not Found' }}</td>
-                        <td>{{ '%0.2f'|format(iuser.win_loss_ratio) }}</td>
+                        <td>
+                            {% if iuser.win_loss_ratio is not none %}
+                                {{ '%0.2f'|format(iuser.percentage) }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ sorted_users_played[ii].win_loss_ratio }}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
+            
+            
         </table>
     </div>
 </div>

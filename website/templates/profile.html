@@ -115,20 +115,33 @@
         <div class="profile-email">Email: {{ user.email }}</div>
     </div>
     
+    {% if game %}
     <div class="stats">
         <div class="stats-item">
-            <strong>Total Games Played: {{game.played}}</strong>
+            <strong>Total Games Played: {{ game.played }}</strong>
         </div>
         <div class="stats-item">
-            <strong>Win/Loss Ratio:{%if game.played- game.won !=0:%}
-                {{'%0.2f'|format(game.won/(game.played-game.won))}}
-                {%else:%}
-                {{'N/A'}}
-                {%endif%}
+            <strong>Win/Loss Ratio:
+                {% if game.played - game.won != 0 %}
+                    {{ '%0.2f'|format(game.won / (game.played - game.won)) }}
+                {% else %}
+                    N/A
+                {% endif %}
             </strong>
         </div>
-        
+        <div class="stats-item">
+            <strong>Win Percentage Ratio:
+                {% if game.played != 0 %}
+                    {{ '%0.2f'|format(game.won / game.played *100) }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </strong>
+        </div>
     </div>
+{% else %}
+    <p>No game data available.</p>
+{% endif %}
     
     <div class="change-password-form">
         <h3>Change Password</h3>

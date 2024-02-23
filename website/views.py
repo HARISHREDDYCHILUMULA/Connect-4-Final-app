@@ -36,9 +36,16 @@ def profile():
 @login_required
 def leaderboard():
     users = db.session.query(Game.user_id, (Game.won / (Game.played - Game.won)).label('win_loss_ratio')).all()
-    sorted_users = sorted(users, key=lambda x: x.win_loss_ratio, reverse=True)
+    users2 = db.session.query(Game.user_id, (Game.won / Game.played * 100).label('percentage')).all()
+    sorted_users_played = sorted(users, key=lambda x: x.win_loss_ratio if x.win_loss_ratio is not None else float('-inf'))
+    sorted_users = sorted(users2, key=lambda x: x.percentage if x.percentage is not None else float('-inf'), reverse=True)
+    
+    # Enumerate the sorted_users
+    enumerated_users = list(enumerate(sorted_users))
+
     top_user = sorted_users[0] if sorted_users else None
-    return render_template('leaderboard.html', user=current_user,top_user=top_user, sorted_users=sorted_users)
+    return render_template('leaderboard.html', user=current_user, top_user=top_user, sorted_users=enumerated_users, sorted_users_played=sorted_users_played)
+
 
 @views.route('/messages')
 @login_required
