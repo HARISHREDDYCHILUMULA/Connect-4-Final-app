@@ -121,7 +121,7 @@
         </div>
         <div class="stats-item">
             <strong>Win/Loss Ratio:{%if game.played- game.won !=0:%}
-                {{game.won/(game.played-game.won)}}
+                {{'%0.2f'|format(game.won/(game.played-game.won))}}
                 {%else:%}
                 {{'N/A'}}
                 {%endif%}
